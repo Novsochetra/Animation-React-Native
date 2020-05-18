@@ -2,14 +2,7 @@ import React, {ReactElement} from 'react'
 import {StyleSheet, Image, Dimensions} from 'react-native'
 import Animated from 'react-native-reanimated'
 import {PanGestureHandler, State} from 'react-native-gesture-handler'
-import {
-  usePanGestureHandler,
-  useValue,
-  snapPoint,
-  timing,
-  withOffset,
-  useClock,
-} from 'react-native-redash'
+import {usePanGestureHandler, useValue, snapPoint, useClock, timing} from 'react-native-redash'
 
 const IMAGES = [
   require('../../assets/images/image-1.jpg'),
@@ -21,7 +14,7 @@ const IMAGES = [
 const WIDTH = Dimensions.get('window').width
 const HEIGHT = Dimensions.get('window').height
 
-const {useCode, cond, eq, set, add, debug} = Animated
+const {useCode, cond, eq, set, add} = Animated
 const snapPoints = IMAGES.map((image, i) => i * -WIDTH)
 
 export const ScrollViewImagesGallery = (): ReactElement => {
@@ -68,5 +61,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     width: WIDTH,
     height: HEIGHT,
+    // transform: [{rotateY: '45deg'}],
   },
 })
