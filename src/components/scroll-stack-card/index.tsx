@@ -1,13 +1,11 @@
-import React, {ReactElement, useState} from 'react'
-import {StyleSheet, Dimensions} from 'react-native'
+import React, {ReactElement} from 'react'
+import {StyleSheet} from 'react-native'
 import Animated, {interpolate, Extrapolate} from 'react-native-reanimated'
 import {usePanGestureHandler, diffClamp, withDecay} from 'react-native-redash'
 import {PanGestureHandler} from 'react-native-gesture-handler'
 import {Card, Cards, CARD_HEIGHT} from '../common/Card'
 
 type ScrollStackCardProps = {}
-
-const height = Dimensions.get('window').height
 
 const MARGIN = 16
 const HEIGHT = CARD_HEIGHT + MARGIN * 2
