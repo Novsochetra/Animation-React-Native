@@ -3,13 +3,15 @@ import {} from 'react-native'
 // import {ScrollViewImagesGallery} from './src/components/scrollview-images-gallery'
 // import {ScrollTransformCard} from './src/components/scroll-transform-card'
 // import {ScrollStackCard} from './src/components/scroll-stack-card'
-import {FacebookStoryScroll} from './src/components/facebook-story-scroll'
+// import {FacebookStoryScroll} from './src/components/facebook-story-scroll'
+import {Rotation3DCard} from './src/components/3d-rotation-card'
 
 export const App = (): ReactElement => {
   // return <ScrollViewImagesGallery />
   // return <ScrollTransformCard />
   // return <ScrollStackCard />
-  return <FacebookStoryScroll />
+  // return <FacebookStoryScroll />
+  return <Rotation3DCard />
 }
 
 export default App
