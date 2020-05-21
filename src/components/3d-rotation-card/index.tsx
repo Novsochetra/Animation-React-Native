@@ -1,5 +1,5 @@
 import React, {useState, ReactElement, useMemo} from 'react'
-import {StyleSheet, Dimensions, SafeAreaView} from 'react-native'
+import {StyleSheet, Dimensions, SafeAreaView, View} from 'react-native'
 import {TapGestureHandler, State} from 'react-native-gesture-handler'
 import Animated, {
   Value,
@@ -17,11 +17,16 @@ import Animated, {
   timing,
   Easing,
   stopClock,
+  eq,
 } from 'react-native-reanimated'
 import {Card, Cards, CARD_HEIGHT, CARD_WIDTH} from '../common/Card'
 
 const containerHeight = Dimensions.get('window').height
 const containerWidth = Dimensions.get('window').width
+const CENTER_SNAPPOINTS = {
+  top: (containerHeight - CARD_HEIGHT) / 2,
+  left: (containerWidth - CARD_WIDTH) / 2,
+}
 
 const cards = [
   {
@@ -42,7 +47,7 @@ export function runTiming(clock: Clock, value: number, dest: number): any {
   const config = {
     duration: 500,
     toValue: new Value(0),
-    easing: Easing.inOut(Easing.ease),
+    easing: Easing.linear,
   }
 
   return block([
@@ -55,13 +60,13 @@ export function runTiming(clock: Clock, value: number, dest: number): any {
       startClock(clock),
     ]),
     timing(clock, state, config),
-    cond(state.finished, debug('stop clock', stopClock(clock))),
+    cond(state.finished, stopClock(clock)),
     state.position,
   ])
 }
 
 export const Rotation3DCard = (): ReactElement => {
-  const [isRotate, setIsRotate] = useState<boolean>(false)
+  const [shouldStartRotate, setShouldStartRotate] = useState<boolean>(false)
 
   const {clock, isRotating, x} = useMemo(
     () => ({
@@ -78,15 +83,23 @@ export const Rotation3DCard = (): ReactElement => {
     extrapolate: Extrapolate.CLAMP,
   })
 
+  const transformZIndexFrontFaceCard = interpolate(x, {
+    inputRange: [-1, 0],
+    outputRange: [0, 1],
+    extrapolate: Extrapolate.CLAMP,
+  })
+
+  const transformZIndexBackFaceCard = interpolate(x, {
+    inputRange: [0, 1],
+    outputRange: [0, 1],
+    extrapolate: Extrapolate.CLAMP,
+  })
+
   useCode(
     () =>
       block([
-        cond(
-          isRotating,
-          block([debug('isRotating true', x), set(x, runTiming(clock, 0, 1))]),
-
-          block([debug('isRotating false', x), set(x, runTiming(clock, 1, 0))])
-        ),
+        cond(eq(isRotating, 1), block([set(x, runTiming(clock, 0, 1))])),
+        cond(eq(isRotating, -1), block([set(x, runTiming(clock, 1, 0))])),
       ]),
     []
   )
@@ -95,19 +108,28 @@ export const Rotation3DCard = (): ReactElement => {
     <SafeAreaView style={styles.container}>
       <TapGestureHandler
         onHandlerStateChange={({nativeEvent: {state}}) => {
-          let newState
           if (state === State.ACTIVE) {
-            newState = !isRotate
-            setIsRotate(newState)
-            isRotating.setValue(newState ? 1 : 0)
+            const newState = !shouldStartRotate
+            setShouldStartRotate(newState)
+            isRotating.setValue(newState ? 1 : -1)
           }
         }}>
         <Animated.View
           style={[
             styles.imageContainer,
-            {transform: [{perspective: 10000}, {rotateY: concat(rotateYAsDeg, 'deg')}]},
+            {transform: [{perspective: 1000}, {rotateY: concat(rotateYAsDeg, 'deg')}]},
           ]}>
-          <Card type={cards[0].type} />
+          <Animated.View style={{zIndex: transformZIndexFrontFaceCard}}>
+            <Card type={cards[0].type} />
+          </Animated.View>
+          <Animated.View
+            style={{
+              ...StyleSheet.absoluteFillObject,
+              zIndex: transformZIndexBackFaceCard,
+              transform: [{perspective: 1000}, {rotateY: '-180deg'}],
+            }}>
+            <Card type={cards[1].type} />
+          </Animated.View>
         </Animated.View>
       </TapGestureHandler>
     </SafeAreaView>
@@ -122,13 +144,9 @@ const styles = StyleSheet.create({
 
   imageContainer: {
     ...StyleSheet.absoluteFillObject,
-    top: (containerHeight - CARD_HEIGHT) / 2,
-    left: (containerWidth - CARD_WIDTH) / 2,
+    top: CENTER_SNAPPOINTS.top,
+    left: CENTER_SNAPPOINTS.left,
     width: CARD_WIDTH,
     height: CARD_HEIGHT,
-  },
-
-  slider: {
-    top: 100,
   },
 })
