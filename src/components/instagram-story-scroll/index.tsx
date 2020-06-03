@@ -32,13 +32,13 @@ export const InstagramStoryScroll = (_: InstagramStoryScrollProps): ReactElement
 
   const rotateY1 = interpolate(translateX, {
     inputRange: [minClamp, maxClamp],
-    outputRange: [0, 90],
+    outputRange: [0, 85],
     extrapolate: Extrapolate.CLAMP,
   })
 
   const positionX1 = interpolate(rotateY1, {
     inputRange: [0, 90],
-    outputRange: [-CARD_WIDTH / 2, -100],
+    outputRange: [CARD_WIDTH, CARD_WIDTH],
     extrapolate: Extrapolate.CLAMP,
   })
 
@@ -49,8 +49,8 @@ export const InstagramStoryScroll = (_: InstagramStoryScrollProps): ReactElement
           <Animated.View
             style={[
               styles.image,
-              //   {transform: [{perspective: 2000}, {}, {rotateY: concat(rotateY, 'deg')}]},
-              {transform: [{perspective: 2000}, {}, {rotateY: '-85deg'}]},
+              {transform: [{perspective: 2000}, {}, {rotateY: concat(rotateY, 'deg')}]},
+              //   {transform: [{perspective: 2000}, {}, {rotateY: '-85deg'}]},
             ]}>
             <Card type={cards[0].type} />
           </Animated.View>
@@ -59,10 +59,12 @@ export const InstagramStoryScroll = (_: InstagramStoryScrollProps): ReactElement
               styles.image,
               {
                 transform: [
-                  {perspective: 800},
-                  {translateX: positionX1},
-                  //   {rotateY: concat(rotateY1, 'deg')},
-                  {rotateY: '-85deg'},
+                  {perspective: 2000},
+                  //   {translateX: positionX1},
+                  {translateX: CARD_WIDTH / 2},
+                  {rotateY: concat(rotateY1, 'deg')},
+                  //   {rotateY: '85deg'},
+                  //   {translateX: CARD_WIDTH / 2},
                 ],
               },
             ]}>
