@@ -6,6 +6,7 @@ import {} from 'react-native'
 // import {FacebookStoryScroll} from './src/components/facebook-story-scroll'
 // import {Rotation3DCard} from './src/components/3d-rotation-card'
 import {InstagramStoryScroll} from './src/components/instagram-story-scroll'
+import {FashionScreen} from './src/components/fashion/FashionScreen'
 
 export const App = (): ReactElement => {
   // return <ScrollViewImagesGallery />
@@ -13,7 +14,8 @@ export const App = (): ReactElement => {
   // return <ScrollStackCard />
   // return <FacebookStoryScroll />
   // return <Rotation3DCard />
-  return <InstagramStoryScroll />
+  // return <InstagramStoryScroll />
+  return <FashionScreen />
 }
 
 export default App
