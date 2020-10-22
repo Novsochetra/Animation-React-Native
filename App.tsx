@@ -8,6 +8,7 @@ import {ScrollStackCard} from './src/components/scroll-stack-card'
 // import {InstagramStoryScroll} from './src/components/instagram-story-scroll'
 // import {FashionScreen} from './src/components/fashion/FashionScreen'
 import {MessengerChatHead} from './src/components/messenger-chat'
+import {AnimatedBottomTab} from './src/components/animate-bottom-tab/AnimatedBottomTab'
 
 export const App = (): ReactElement => {
   // return <ScrollViewImagesGallery />
@@ -17,7 +18,8 @@ export const App = (): ReactElement => {
   // return <Rotation3DCard />
   // return <InstagramStoryScroll />
   // return <FashionScreen />
-  return <MessengerChatHead />
+  // return <MessengerChatHead />
+  return <AnimatedBottomTab />
 }
 
 export default App
